@@ -1,0 +1,54 @@
+{
+  "name": "next-affiliate-sdk",
+  "version": "0.1.0",
+  "description": "NEX mobile attribution SDK for React Native — recovers the signed nx_pb attribution token from custom-scheme deep links, Universal/App Links, and deferred install matching.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rimraf lib",
+    "prepare": "npm run clean && npm run build",
+    "lint": "eslint \"src/**/*.ts\" \"__tests__/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" \"__tests__/**/*.ts\" --fix",
+    "test": "jest"
+  },
+  "keywords": [
+    "react-native",
+    "attribution",
+    "affiliate",
+    "deep-link",
+    "universal-link",
+    "deferred-deep-link",
+    "nex"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maksymtsurkan-ganz/next.affilate.sdk.rn.git"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=1.17.0",
+    "react": ">=17.0.0",
+    "react-native": ">=0.68.0"
+  },
+  "devDependencies": {
+    "@react-native-async-storage/async-storage": "^1.23.1",
+    "@types/jest": "^29.5.12",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^5.0.10",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.5.4"
+  }
+}
