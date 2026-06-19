@@ -20,6 +20,12 @@ export interface Attribution {
   clickId: string | null;
   /** Where this attribution was captured. */
   source: AttributionSource;
+  /**
+   * Optional in-app navigation path carried by the link (e.g. `/carwash/123`),
+   * from the `route` query param on the scheme/Universal Link. The host app
+   * navigates to it after open. `null` when the link carried no route.
+   */
+  route: string | null;
   /** `true` when at least one identifier is present. */
   isAttributed: boolean;
 }

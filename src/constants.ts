@@ -15,5 +15,6 @@ export const StorageKeys = {
   nxPb: 'next_affiliate_nx_pb',
   clickId: 'next_affiliate_click_id',
   source: 'next_affiliate_source',
+  route: 'next_affiliate_route',
   deferredChecked: 'next_affiliate_deferred_checked',
 } as const;

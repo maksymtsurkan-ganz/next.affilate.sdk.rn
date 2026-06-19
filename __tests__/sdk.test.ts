@@ -16,6 +16,7 @@ describe('handleLink — scheme', () => {
       nxPb: 'DEMO',
       clickId: 'demo-click',
       source: 'scheme',
+      route: null,
       isAttributed: true,
     });
     expect(store.map.get(StorageKeys.nxPb)).toBe('DEMO');
@@ -27,6 +28,17 @@ describe('handleLink — scheme', () => {
     sdk.configure(config);
     const attr = await sdk.handleLink('MyApp://open?nx_pb=X');
     expect(attr?.nxPb).toBe('X');
+  });
+
+  it('carries the route query param and persists it', async () => {
+    const store = new MemoryStore();
+    const sdk = new NextAffiliateSdk(store);
+    sdk.configure(config);
+
+    const attr = await sdk.handleLink('myapp://open?nx_pb=DEMO&route=/carwash/123');
+
+    expect(attr?.route).toBe('/carwash/123');
+    expect(store.map.get(StorageKeys.route)).toBe('/carwash/123');
   });
 });
 
@@ -46,8 +58,27 @@ describe('handleLink — universal link', () => {
       nxPb: 'SIGNED',
       clickId: null,
       source: 'universalLink',
+      route: null,
       isAttributed: true,
     });
+  });
+
+  it('reads route from the incoming link, not the resolved Location', async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue(mockRedirectResponse('https://store.example.com/x?nx_pb=SIGNED')) as never;
+
+    const store = new MemoryStore();
+    const sdk = new NextAffiliateSdk(store);
+    sdk.configure(config);
+
+    const attr = await sdk.handleLink(
+      'https://acme.next-ads-server-dev.com/trk/abc?route=/carwash/9',
+    );
+
+    expect(attr?.nxPb).toBe('SIGNED');
+    expect(attr?.route).toBe('/carwash/9');
+    expect(store.map.get(StorageKeys.route)).toBe('/carwash/9');
   });
 
   it('not-attributed: no nx_pb in Location → null, stores nothing', async () => {
@@ -94,6 +125,7 @@ describe('checkDeferredOnFirstLaunch — once-guard', () => {
       nxPb: null,
       clickId: 'c-9',
       source: 'deferred',
+      route: null,
       isAttributed: true,
     });
     expect(store.map.get(StorageKeys.deferredChecked)).toBe('true');

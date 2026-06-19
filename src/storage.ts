@@ -33,17 +33,18 @@ export class AttributionStore {
   }
 
   async read(): Promise<Attribution | null> {
-    const [nxPb, clickId, sourceRaw] = await Promise.all([
+    const [nxPb, clickId, sourceRaw, route] = await Promise.all([
       this.store.getItem(StorageKeys.nxPb),
       this.store.getItem(StorageKeys.clickId),
       this.store.getItem(StorageKeys.source),
+      this.store.getItem(StorageKeys.route),
     ]);
 
     const source = parseAttributionSource(sourceRaw);
     if (source == null || (nxPb == null && clickId == null)) {
       return null;
     }
-    return makeAttribution(nxPb, clickId, source);
+    return makeAttribution(nxPb, clickId, source, route);
   }
 
   async write(attribution: Attribution): Promise<void> {
@@ -55,6 +56,9 @@ export class AttributionStore {
         ? this.store.setItem(StorageKeys.clickId, attribution.clickId)
         : this.store.removeItem(StorageKeys.clickId),
       this.store.setItem(StorageKeys.source, attribution.source),
+      attribution.route != null
+        ? this.store.setItem(StorageKeys.route, attribution.route)
+        : this.store.removeItem(StorageKeys.route),
     ]);
   }
 
@@ -64,6 +68,7 @@ export class AttributionStore {
       this.store.removeItem(StorageKeys.nxPb),
       this.store.removeItem(StorageKeys.clickId),
       this.store.removeItem(StorageKeys.source),
+      this.store.removeItem(StorageKeys.route),
     ]);
   }
 

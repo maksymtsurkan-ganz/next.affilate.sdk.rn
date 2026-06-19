@@ -77,7 +77,8 @@ export class NextAffiliateSdk {
     if (nxPb == null && clickId == null) {
       return null;
     }
-    const attribution = makeAttribution(nxPb, clickId, 'scheme');
+    const route = emptyToNull(getQueryParam(url, 'route'));
+    const attribution = makeAttribution(nxPb, clickId, 'scheme', route);
     await this.store.write(attribution);
     return attribution;
   }
@@ -90,7 +91,10 @@ export class NextAffiliateSdk {
     if (nxPb == null) {
       return null;
     }
-    const attribution = makeAttribution(nxPb, null, 'universalLink');
+    // The route lives on the INCOMING link the app was opened with, not on the
+    // resolved Location (which is the offer URL).
+    const route = emptyToNull(getQueryParam(url, 'route'));
+    const attribution = makeAttribution(nxPb, null, 'universalLink', route);
     await this.store.write(attribution);
     return attribution;
   }
@@ -143,6 +147,11 @@ export class NextAffiliateSdk {
       // best-effort
     }
   }
+}
+
+/** Collapses an absent or empty string to null. */
+function emptyToNull(value: string | null): string | null {
+  return value == null || value === '' ? null : value;
 }
 
 /**

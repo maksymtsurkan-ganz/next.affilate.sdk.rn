@@ -5,11 +5,13 @@ export function makeAttribution(
   nxPb: string | null,
   clickId: string | null,
   source: AttributionSource,
+  route: string | null = null,
 ): Attribution {
   return {
     nxPb,
     clickId,
     source,
+    route,
     isAttributed: nxPb != null || clickId != null,
   };
 }
